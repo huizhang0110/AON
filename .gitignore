@@ -1,0 +1,8 @@
+__pycache__/*
+exp_log/*
+demo/*
+data/*.tfrecord
+data/__pycache__/*
+backup/*
+back/*
+exp_log_single_sequence/*
