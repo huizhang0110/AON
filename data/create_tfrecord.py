@@ -5,13 +5,11 @@ import standard_fields as fields
 import cv2 
 import scipy
 import dataset_util
-import imghdr
 
 
 flags = tf.app.flags
 flags.DEFINE_string('output_path', '/share/zhui/mnt/train.tfrecord', 'tfrecord filename')
-flags.DEFINE_string('tags_file_path', '/share/zhui/mnt/ramdisk/max/90kDICT32px/imlist.txt', 'tags file file')
-flags.DEFINE_string('data_root', '/share/zhui/mnt/ramdisk/max/90kDICT32px/', 'data root directory')
+flags.DEFINE_string('tags_file_path', '/share/zhui/mnt/ramdisk/max/imlist_filted.txt', 'tags file file')
 FLAGS = flags.FLAGS
 
 
@@ -21,13 +19,10 @@ def main(unused_argv):
 
     with open(FLAGS.tags_file_path) as fo:
         for line in fo:
-            filename = line.strip().split('/', 1)[1]
-            image_path = os.path.join(FLAGS.data_root, filename)
+            image_path = line.strip()
+            filename = '/'.join(line.strip().split('/')[-2:])
             groundtruth_text = line.split('_')[1]
-            image_type = imghdr.what(image_path)
-            if image_type != 'jpeg':
-                print(image_path, image_type)
-                continue
+
             try:
                 height, width, channel = cv2.imread(image_path).shape
                 image_bin = open(image_path, 'rb').read()

@@ -65,7 +65,7 @@ def read_tfrecord_use_queue_runner(filename, batch_size=32):
         batch_size=batch_size, 
         min_after_dequeue=min_after_dequeue,
         capacity=capacity,
-        num_threads=1
+        num_threads=8
     )
 
     batch_tensor_dict = {

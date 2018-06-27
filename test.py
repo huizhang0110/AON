@@ -56,6 +56,7 @@ def test_single_picture():
         num_total += 1
         num_correct += (gt.lower() == pred_text[0].decode())
     print('Accu: {}/{}={}'.format(num_correct, num_total, num_correct/num_total))
+    print('{}'.format(save_path))
   else:
     raise ValueError('Unsupported mode: {}'.format(FLAGS.mode))
   sess.close()
