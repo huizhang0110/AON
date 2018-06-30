@@ -10,6 +10,7 @@ flags.DEFINE_integer('batch_size', 32, 'define train batch size')
 flags.DEFINE_integer('max_steps', 2000000, 'step nums for training')
 flags.DEFINE_boolean('restore', True, 'restore model parameter from checkpoint file')
 flags.DEFINE_string('tfrecord_file_path', '/share/zhui/mnt/train.tfrecord', 'tfrecord file path')
+flags.DEFINE_boolean('single_seq', False, 'Use FG or not')
 FLAGS = flags.FLAGS
 
 
@@ -26,7 +27,8 @@ def main(unused_argv):
     print('image_placeholder', image_placeholder)
     print('groundtruth_placeholder', groundtruth_text_placeholder)
     
-    output_tensor_dict, eval_output_tensor_dict = inference(image_placeholder, groundtruth_text_placeholder)
+    output_tensor_dict, eval_output_tensor_dict = inference(
+        image_placeholder, groundtruth_text_placeholder, FLAGS.single_seq)
     loss_tensor = output_tensor_dict['loss']
     output_labels_tensor = output_tensor_dict['labels']
     output_predict_text_tensor = output_tensor_dict['predict_text']
@@ -97,7 +99,7 @@ def main(unused_argv):
             
             if step % 1000 == 0:
                 saver.save(sess, save_path=checkpoint_dir, global_step=global_step)
-                print('Write checkpoint')
+                print('Write checkpoint {}'.format(sess.run(global_step)))
                 
     except tf.errors.OutOfRangeError():
         print('All finished')

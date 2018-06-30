@@ -187,11 +187,14 @@ def _arbitrary_orientation_network(inputs):
         return res_dict
 
 
-def _filter_gate(aon_core_output_dict):
+def _filter_gate(aon_core_output_dict, single_seq=False):
     """the filter gate (FG) for combing four feature sequences with the character sequence.
     """
-    
     feature_seq_1 = aon_core_output_dict['feature_seq_1']
+    # DEBUG
+    if single_seq:
+        return feature_seq_1
+
     feature_seq_1_reverse = aon_core_output_dict['feature_seq_1_reverse']
     feature_seq_2 = aon_core_output_dict['feature_seq_2']
     feature_seq_2_reverse = aon_core_output_dict['feature_seq_2_reverse']
@@ -305,10 +308,10 @@ def _attention_based_decoder(encoder_outputs, groundtruth_text):
             
 
 
-def inference(images, groundtruth_text):
+def inference(images, groundtruth_text, single_seq=False):
     base_features = base_cnn(images)
     aon_core_output_dict = _arbitrary_orientation_network(base_features)
-    encoded_sequence = _filter_gate(aon_core_output_dict)
+    encoded_sequence = _filter_gate(aon_core_output_dict, single_seq)
     train_output_dict, pred_output_dict = _attention_based_decoder(encoded_sequence, groundtruth_text)
     return train_output_dict, pred_output_dict
 
