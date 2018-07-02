@@ -1,6 +1,5 @@
 __pycache__/*
 exp_log/*
-demo/*
 data/*.tfrecord
 data/__pycache__/*
 backup/*
